@@ -1,0 +1,6 @@
+== Add SSH User
+
+[source,bash]
+----
+ansible-playbook -i <server_ip_addr>, --ask-pass add-ssh-user.yml --extra-vars='username="<username>" password="<password>"'
+----

@@ -1,0 +1,20 @@
+---
+- hosts: all
+  gather_facts: no
+  remote_user: root
+  become: true
+  tasks:
+  - name: Add a new user
+    user:
+      name: "{{ username }}"
+      shell: /bin/bash
+      password: "{{ password | password_hash('sha512') }}"
+  - name: Add user to the sudoers
+    copy:
+      dest: "/etc/sudoers.d/{{ username }}"
+      content: "{{ username }}  ALL=(ALL)  NOPASSWD: ALL"
+  - name: Deploy SSH Key
+    authorized_key:
+      user={{ username }}
+      key="{{ lookup('file', '~{{ username }}/.ssh/id_rsa.pub') }}"
+      state=present

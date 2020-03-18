@@ -2,3 +2,5 @@
 
 include::docs/install-rhel.adoc[]
 
+include::docs/add-ssh-user.adoc[]
+
