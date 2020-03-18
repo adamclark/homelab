@@ -1,0 +1,4 @@
+= Homelab Setup
+
+include::docs/install-rhel.adoc[]
+

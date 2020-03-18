@@ -1,0 +1,57 @@
+== Install RHEL
+
+. Download the RHEL 8 Boot ISO image.
+
+. Write the Boot image to a USB stick
++
+[source,bash]
+----
+diskutil list
+diskutil unmountDisk /dev/disk2
+sudo dd if=/Users/aclark/Downloads/rhel-8.1-x86_64-boot.iso of=/dev/rdisk2 bs=1m
+----
+
+. Install httpd (on another machine)
++
+[source,bash]
+----
+brew install httpd
+sudo vi /usr/local/etc/httpd/httpd.conf
+sudo apachectl start
+----
+
+. Get the httpd server IP address
++
+[source,bash]
+----
+ifconfig
+----
+
+. Download the RHEL 8 Binary DVD ISO image.
+
+. Mount the DVD image and serve through httpd
++
+[source,bash]
+----
+mkdir /tmp/rhel8-install/
+hdiutil attach -nomount ~/Downloads/rhel-8.1-x86_64-dvd.iso
+mount -t cd9660 /dev/disk2 /tmp/rhel8-install
+ls /tmp/rhel8-install
+mkdir /usr/local/var/www/rhel8
+cp -r /tmp/rhel8-install/ /usr/local/var/www/rhel8/
+----
+
+. Plug the USB stick into the homelab server and boot from the USB stick
+.. Follow the RHEL install wizard
+.. Add the URL for the RHEL Install provided via httpd as the installation source
+.. Run the install and reboot the server
+.. Setup subsctiption-manager
+
+. Stop httpd and tidy up
++
+[source,bash]
+----
+sudo apachectl stop
+umount /tmp/rhel8-install
+hdiutil detach /dev/disk2
+---- 
