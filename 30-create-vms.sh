@@ -4,7 +4,7 @@ source 00-set-vars.sh
 
 # Create the bootstrap node:
 virt-install --name ${CLUSTER_NAME}-bootstrap \
-  --disk size=50 --ram 16000 --cpu host --vcpus 4 \
+  --disk pool=${VIR_STORAGE_POOL},size=50 --ram 16000 --cpu host --vcpus 4 \
   --os-type linux --os-variant rhel7 \
   --network network=${VIR_NET} --noreboot --noautoconsole \
   --location rhcos-install/ \
@@ -14,7 +14,7 @@ virt-install --name ${CLUSTER_NAME}-bootstrap \
 for i in {1..3}
 do
 virt-install --name ${CLUSTER_NAME}-master-${i} \
---disk size=50 --ram 16000 --cpu host --vcpus 4 \
+--disk pool=${VIR_STORAGE_POOL},size=50 --ram 16000 --cpu host --vcpus 4 \
 --os-type linux --os-variant rhel7 \
 --network network=${VIR_NET} --noreboot --noautoconsole \
 --location rhcos-install/ \
@@ -25,7 +25,7 @@ done
 for i in {1..2}
 do
   virt-install --name ${CLUSTER_NAME}-worker-${i} \
-  --disk size=50 --ram 8192 --cpu host --vcpus 4 \
+  --disk pool=${VIR_STORAGE_POOL},size=50 --ram 8192 --cpu host --vcpus 4 \
   --os-type linux --os-variant rhel7 \
   --network network=${VIR_NET} --noreboot --noautoconsole \
   --location rhcos-install/ \

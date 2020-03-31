@@ -14,6 +14,8 @@ SSH_KEY="~/.ssh/id_rsa.pub"
 # All the VMs will be created on the libvirt’s network that you pick. By default libvirt has only one “default” network.
 # You can find out libvirt’s networks by running virsh net-list
 VIR_NET="default"
+# Set the storage pool to use for the OCP VMs
+VIR_STORAGE_POOL="ocp4-storage-pool"
 
 # Set the dnsmasq configuration directory.
 # If you are using NetworkManager’s embedded dnsmasq, set it to “/etc/NetworkManager/dnsmasq.d”.
