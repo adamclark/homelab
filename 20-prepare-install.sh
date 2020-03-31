@@ -72,8 +72,10 @@ cp $OCP4_INSTALL_DIR/install_dir/install-config.yaml $OCP4_INSTALL_DIR/install_d
 # Generate the ignition files
 $OCP4_INSTALL_DIR/openshift-install create ignition-configs --dir=$OCP4_INSTALL_DIR/install_dir
 
-# Start python’s webserver, serving the current directory in screen:
+# Start python’s webserver, serving the current directory:
+pushd $OCP4_INSTALL_DIR
 python3 -m http.server ${WEB_PORT} &
+popd
 
 # Make sure that the VMs can access the host on the web port. Remove this if you don’t have iptables/firewalld turned on.
 # If using firewalld
