@@ -8,15 +8,15 @@
 ----
 diskutil list
 diskutil unmountDisk /dev/disk2
-sudo dd if=/Users/aclark/Downloads/rhel-8.1-x86_64-boot.iso of=/dev/rdisk2 bs=1m
+sudo dd if=<path_to_image>/rhel-8.1-x86_64-boot.iso of=/dev/rdisk2 bs=1m
 ----
 
-. Install httpd (on another machine)
+. Install httpd (on another machine, OSX in this example)
 +
 [source,bash]
 ----
 brew install httpd
-sudo vi /usr/local/etc/httpd/httpd.conf
+sudo vi /usr/local/etc/httpd/httpd.conf # What did I edit here?
 sudo apachectl start
 ----
 
