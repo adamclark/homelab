@@ -46,7 +46,7 @@ frontend ${CLUSTER_NAME}-api
   bind *:6443
   default_backend master-api
 backend master-api
-  balance source
+  balance roundrobin
   server bootstrap bootstrap.${CLUSTER_NAME}.${BASE_DOM}:6443 check
   server master-1 master-1.${CLUSTER_NAME}.${BASE_DOM}:6443 check
   server master-2 master-2.${CLUSTER_NAME}.${BASE_DOM}:6443 check
@@ -57,7 +57,7 @@ frontend ${CLUSTER_NAME}-mapi
   bind *:22623
   default_backend master-mapi
 backend master-mapi
-  balance source
+  balance roundrobin
   server bootstrap bootstrap.${CLUSTER_NAME}.${BASE_DOM}:22623 check
   server master-1 master-1.${CLUSTER_NAME}.${BASE_DOM}:22623 check
   server master-2 master-2.${CLUSTER_NAME}.${BASE_DOM}:22623 check
@@ -68,7 +68,7 @@ frontend ${CLUSTER_NAME}-http
   bind *:80
   default_backend ingress-http
 backend ingress-http
-  balance source
+  balance roundrobin
   server worker-1 worker-1.${CLUSTER_NAME}.${BASE_DOM}:80 check
   server worker-2 worker-2.${CLUSTER_NAME}.${BASE_DOM}:80 check
     
@@ -77,7 +77,7 @@ frontend ${CLUSTER_NAME}-https
   bind *:443
   default_backend infra-https
 backend infra-https
-  balance source
+  balance roundrobin
   server worker-1 worker-1.${CLUSTER_NAME}.${BASE_DOM}:443 check
   server worker-2 worker-2.${CLUSTER_NAME}.${BASE_DOM}:443 check
 ' > /etc/haproxy/haproxy.cfg
