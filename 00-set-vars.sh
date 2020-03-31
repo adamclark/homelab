@@ -9,7 +9,7 @@ BASE_DOM="lab"
 CLUSTER_NAME="ocp4"
 
 # Pick your SSH public key (file):
-SSH_KEY="~/.ssh/id_rsa.pub"
+SSH_KEY="$HOME/.ssh/id_rsa.pub"
 
 # All the VMs will be created on the libvirt’s network that you pick. By default libvirt has only one “default” network.
 # You can find out libvirt’s networks by running virsh net-list
