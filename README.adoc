@@ -136,7 +136,7 @@ ssh lb.${CLUSTER_NAME}.${BASE_DOM} netstat -nltupe | grep ':6443\|:22623\|:80\|:
 === Remove the Bootstrap VM
 
 ```
-./40-remove-bootstrap-vm.sh
+./90-remove-bootstrap-vm.sh
 ```
 
 === Terminate the Python Web Server
