@@ -40,7 +40,7 @@ echo "$LBIP lb.${CLUSTER_NAME}.${BASE_DOM}" \
 echo "address=/apps.${CLUSTER_NAME}.${BASE_DOM}/${LBIP}" >> ${DNS_DIR}/${CLUSTER_NAME}.conf
 
 # Find the IP and MAC address of the NFS VM. Add DHCP reservation (so the VM always get the same IP) and an entry in /etc/hosts.
-NFSIP=$(virsh domifaddr "${CLUSTER_NAME}-lb" | grep ipv4 | head -n1 | awk '{print $4}' | cut -d'/' -f1)
-MAC=$(virsh domifaddr "${CLUSTER_NAME}-lb" | grep ipv4 | head -n1 | awk '{print $2}')
+NFSIP=$(virsh domifaddr "${CLUSTER_NAME}-nfs" | grep ipv4 | head -n1 | awk '{print $4}' | cut -d'/' -f1)
+MAC=$(virsh domifaddr "${CLUSTER_NAME}-nfs" | grep ipv4 | head -n1 | awk '{print $2}')
 virsh net-update ${VIR_NET} add-last ip-dhcp-host --xml "<host mac='$MAC' ip='$NFSIP'/>" --live --config
-echo "$NFSIP lb.${CLUSTER_NAME}.${BASE_DOM}" >> /etc/hosts
+echo "$NFSIP nfs.${CLUSTER_NAME}.${BASE_DOM}" >> /etc/hosts
