@@ -1,5 +1,7 @@
 #!/bin/bash
 
+OCP4_INSTALL_DIR=~/ocp4
+
 # Pick a base domain for your cluster:
 BASE_DOM="lab"
 

@@ -1,6 +1,140 @@
 = Homelab Setup
 
+== RHEL Install
+
 include::docs/install-rhel.adoc[]
 
 include::docs/add-ssh-user.adoc[]
 
+== OpenShift Install
+
+These steps are based on https://kxr.me/2019/08/17/openshift-4-upi-install-libvirt-kvm/ with some updates, improvements and additions...
+
+=== Pre-requisites:
+
+* Download your pull secret from https://cloud.redhat.com/openshift/install/metal/user-provisioned[Red Hat OpenShift Cluster Manager] into a file named `/tmp/pull-secret`.
+
+* Download the RHEL KVM Guest Image
+Download the RHEL guest image for KVM. We will use this to setup an external load balancer using haproxy and an NFS server for the Image Registry.
+This requires authentication so do now manually.
+Visit https://access.redhat.com/downloads/content/69/ver=/rhel---7/7.7/x86_64/product-software[RHEL download page] (login required) and copy the download link of Red Hat Enterprise Linux KVM Guest Image (right-click on “Download Now” and copy link location).
+```
+wget "<rhel_kvm_image_url>" -O /var/lib/libvirt/images/${CLUSTER_NAME}-lb.qcow2
+cp /var/lib/libvirt/images/${CLUSTER_NAME}-lb.qcow2 /var/lib/libvirt/images/${CLUSTER_NAME}-nfs.qcow2
+```
+
+* Clone Repo
+```
+git clone https://github.com/adamclark/homelab.git
+cd homelab
+```
+
+* Install Pre-Requisites
+```
+./10-install-pre-reqs.sh
+```
+
+=== Prepare Imstall
+
+```
+./20-prepare-install.sh
+```
+
+Make sure that the install directory (e.g. ocp4) is being served by python. Also make sure that you can access the ignition (ing) and image (img) files. Simply visit http://localhost:1234 on the host using a browser or curl.
+
+At this point its worth double checking that your DNS is working as expected or the installation will fail later.
+
+Make sure that the hosts/hypervisor’s dns is pointing to the local dnsmasq. The first entry in /etc/resolv.conf should be `nameserver 127.0.0.1`.
+
+Make sure that any entry in `/etc/hosts` is forward and reverse resolvable by libvirt/kvm. You can test this by adding a test record in `/etc/hosts` and restarting libvirtd so it picks up the changed hosts file:
+
+```
+echo "1.2.3.4 test.local" >> /etc/hosts
+systemctl restart libvirtd
+```
+
+Check if the forward and reverse lookup works (verify that you get answers in both the above dig queries):
+
+```
+dig test.local @${HOST_IP}
+dig -x 1.2.3.4 @${HOST_IP}
+```
+
+Make sure that any entry in the dnsmasq.d is also picked up by libvirt/kvm. You can test this by adding a test srv record reloading NetworkManager's dnsmasqd:
+
+```
+echo "srv-host=test.local,yayyy.local,2380,0,10" > ${DNS_DIR}/temp-test.conf
+systemctl reload NetworkManager
+```
+
+Test that both libvirt and your host can resolve the srv record:
+
+```
+dig srv test.local
+dig srv test.local @${HOST_IP}
+dig srv yayyy.local
+dig srv yayyy.local @${HOST_IP}
+```
+
+Clean up: remove the test entry in `/etc/hosts` and delete the conf file.
+
+```
+rm -f ${DNS_DIR}/temp-test.conf
+```
+
+=== Create the VMs
+
+```
+./30-create-vms.sh
+```
+
+We have just created the virtual machines in KVM using virt-install. virt-install should power-off these VMs once it successfully finishes. Wait for VMs to be properly installed and powered off. You can use the following command to watch the status of the VMs:
+```
+watch "virsh list --all | grep '${CLUSTER_NAME}-'"
+```
+
+Start the VMs:
+```
+./35-start-vms.sh
+```
+
+Make sure the VMs are started:
+```
+watch "virsh list --all | grep '${CLUSTER_NAME}-'"
+```
+
+=== Configure DNS
+
+```
+./40-configure-dns.sh
+```
+
+=== Configure HAProxy
+
+```
+./50-configure-haproxy.sh
+```
+
+Make sure haproxy in the load balancer VM is up and running and listening on the desired ports:
+```
+ssh lb.${CLUSTER_NAME}.${BASE_DOM} systemctl status haproxy
+ssh lb.${CLUSTER_NAME}.${BASE_DOM} netstat -nltupe | grep ':6443\|:22623\|:80\|:443'
+```
+
+=== Install OpenShift
+
+```
+./60-install-openshift.sh
+```
+
+=== Configure NFS
+
+```
+./70-configure-nfs.sh
+```
+
+=== Remove the Bootstrap VM
+
+```
+./40-remove-bootstrap-vm.sh
+```
