@@ -42,6 +42,8 @@ cd homelab
 
 Make sure that the install directory (e.g. ocp4) is being served by python. Also make sure that you can access the ignition (ing) and image (img) files. Simply visit http://localhost:1234 on the host using a browser or curl.
 
+Also verify that `$OCP4_INSTALL_DIR/install_dir/install-config.yaml.bak` looks as expected.
+
 At this point its worth double checking that your DNS is working as expected or the installation will fail later.
 
 Make sure that the hosts/hypervisor’s dns is pointing to the local dnsmasq. The first entry in /etc/resolv.conf should be `nameserver 127.0.0.1`.
@@ -72,8 +74,6 @@ Test that both libvirt and your host can resolve the srv record:
 ```
 dig srv test.local
 dig srv test.local @${HOST_IP}
-dig srv yayyy.local
-dig srv yayyy.local @${HOST_IP}
 ```
 
 Clean up: remove the test entry in `/etc/hosts` and delete the conf file.
