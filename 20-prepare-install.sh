@@ -66,6 +66,9 @@ pullSecret: '${PULL_SEC}'
 sshKey: '$(cat $SSH_KEY)'
 EOF
 
+# Make a copy for reference as it will be deleted after the next command
+cp $OCP4_INSTALL_DIR/install_dir/install-config.yaml $OCP4_INSTALL_DIR/install_dir/install-config.yaml.bak
+
 # Generate the ignition files
 $OCP4_INSTALL_DIR/openshift-install create ignition-configs --dir=$OCP4_INSTALL_DIR/install_dir
 
