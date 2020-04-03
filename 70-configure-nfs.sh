@@ -4,7 +4,7 @@ source 00-set-vars.sh
 
 # Instruction used - https://github.com/kevchu3/openshift4-upi-homelab/blob/master/operator/image-registry/README.md
 
-ssh lb.${CLUSTER_NAME}.${BASE_DOM} <<EOF
+ssh nfs.${CLUSTER_NAME}.${BASE_DOM} <<EOF
 
     systemctl enable --now nfs-server rpcbind
     mkdir -p /exports/registry
