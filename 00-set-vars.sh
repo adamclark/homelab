@@ -35,3 +35,13 @@ RHNPASS='<your-rhn-password>'
 
 # Pick a port that you want the web server to listen on
 WEB_PORT="1234"
+
+# Fix mac addresses so that the same IPs are allocated if the VMs are recreated
+MAC_BOOTSTRAP="<insert_mac_address>"
+MAC_MASTER1="<insert_mac_address>"
+MAC_MASTER2="<insert_mac_address>"
+MAC_MASTER3="<insert_mac_address>"
+MAC_WORKER1="<insert_mac_address>"
+MAC_WORKER2="<insert_mac_address>"
+MAC_LB="<insert_mac_address>"
+MAC_NFS="<insert_mac_address>"
