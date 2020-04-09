@@ -16,7 +16,12 @@ EOF
 
 export KUBECONFIG=$OCP4_INSTALL_DIR/install_dir/auth/kubeconfig
 
-$OCP4_INSTALL_DIR/oc project openshift-image-registry
 $OCP4_INSTALL_DIR/oc apply -f registry-volume.pv.yml
+$OCP4_INSTALL_DIR/oc apply -f general-volume-5gi-01.pv.yml
+$OCP4_INSTALL_DIR/oc apply -f general-volume-5gi-02.pv.yml
+$OCP4_INSTALL_DIR/oc apply -f general-volume-10gi-01.pv.yml
+$OCP4_INSTALL_DIR/oc apply -f general-volume-10gi-02.pv.yml
+
+$OCP4_INSTALL_DIR/oc project openshift-image-registry
 $OCP4_INSTALL_DIR/oc apply -f registry-volume.pvc.yml
-$OCP4_INSTALL_DIR/oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"managementState":"Managed","storage":{"claim":"image-registry-storage"}}}'
+$OCP4_INSTALL_DIR/oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"managementState":"Managed","storage":{"pvc":{"claim":"image-registry-storage"}}}}'
