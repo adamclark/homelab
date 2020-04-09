@@ -45,7 +45,7 @@ virt-customize -a /var/lib/libvirt/images/${CLUSTER_NAME}-lb.qcow2 \
 # Create the load balancer VM
 virt-install --import --name ${CLUSTER_NAME}-lb \
   --disk /var/lib/libvirt/images/${CLUSTER_NAME}-lb.qcow2 --memory 1024 --cpu host --vcpus 1 \
-  --network network=${VIR_NET} --mac=${MAC_LB}} --noreboot --noautoconsole
+  --network network=${VIR_NET} --mac=${MAC_LB} --noreboot --noautoconsole
 
 # Customise the RHEL guest image that we downloaded for the NFS server
 virt-customize -a /var/lib/libvirt/images/${CLUSTER_NAME}-nfs.qcow2 \
