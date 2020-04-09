@@ -7,9 +7,17 @@ source 00-set-vars.sh
 ssh nfs.${CLUSTER_NAME}.${BASE_DOM} <<EOF
 
     systemctl enable --now nfs-server rpcbind
+    
+    # Image Registry
     mkdir -p /exports/registry
     chmod -R 777 /exports/registry
     echo "/exports/registry *.${CLUSTER_NAME}.${BASE_DOM}(rw,sync,no_wdelay,root_squash,insecure,fsid=0)" >> /etc/exports
+    
+    # General Purpose Persistent Volumes
+    mkdir -p /exports/pvs
+    chmod -R 777 /exports/pvs
+    echo "/exports/pvs *.${CLUSTER_NAME}.${BASE_DOM}(rw,sync,no_wdelay,root_squash,insecure,fsid=0)" >> /etc/exports
+
     exportfs -rv
 
 EOF
